@@ -87,82 +87,137 @@ public class GameManager{
 		elapsedTime = 0;
 	}
 
+	/**
+	* Returns current GameManager
+	* @see GameManager
+	*/
 	public static GameManager getGameManager(){
 		return gameManager;
 	}
-
+	/**
+	 * Returns current PlayerManager
+	 * @see PlayerManager
+	 */
 	public PlayerManager getPlayerManager(){
 		return playerManager;
 	}
-
+	/**
+	 * Returns current TeamManager
+	 * @see TeamManager
+	 */
 	public TeamManager getTeamManager() {
 		return teamManager;
 	}
-
+	/**
+	 * Returns current ScoreboardManager
+	 * @see ScoreboardManager
+	 */
 	public ScoreboardManager getScoreboardManager() {
 		return scoreboardManager;
 	}
-
+	/**
+	 * Returns current ScenarioManager
+	 * @see ScenarioManager
+	 */
 	public ScenarioManager getScenarioManager() {
 		return scenarioManager;
 	}
-
+	/**
+	 * Returns main config
+	 * @see MainConfig
+	 */
 	public MainConfig getConfig() {
 		return config;
 	}
-
+	/**
+	 * Returns MapLoader
+	 * @see MapLoader
+	 */
 	public MapLoader getMapLoader(){
 		return mapLoader;
 	}
-
+	/**
+	 * Returns current GameState
+	 * @see GameState
+	 */
 	public synchronized GameState getGameState(){
 		return gameState;
 	}
-
+	/**
+	 * Returns true if game is ending
+	 */
 	public boolean getGameIsEnding() {
 		return gameIsEnding;
 	}
-
+	/**
+	 * Returns remaining time
+	 */
 	public synchronized long getRemainingTime(){
 		return remainingTime;
 	}
-
+	/**
+	 * Returns elapsed time
+	 */
 	public synchronized long getElapsedTime(){
 		return elapsedTime;
 	}
-
+	/**
+	 * Returns current episode number
+	 */
 	public int getEpisodeNumber(){
 		return episodeNumber;
 	}
-
+	/**
+	 * Modifies current episode number
+	 * @param episodeNumber Number to change episode number to
+	 */
 	public void setEpisodeNumber(int episodeNumber){
 		this.episodeNumber = episodeNumber;
 	}
-
+	/**
+	 * Returns time until next episode
+	 */
 	public long getTimeUntilNextEpisode(){
-		return episodeNumber * config.get(MainConfig.EPISODE_MARKERS_DELAY) - getElapsedTime();
+		return (long) episodeNumber * config.get(MainConfig.EPISODE_MARKERS_DELAY) - getElapsedTime();
 	}
-
+	/**
+	 * Returns remaining time in formatted form.
+	 */
 	public String getFormattedRemainingTime() {
 		return TimeUtils.getFormattedTime(getRemainingTime());
 	}
-
+	/**
+	 * Modifies remaining time
+	 * @param time Time to change remaining time to
+	 */
 	public synchronized void setRemainingTime(long time){
 		remainingTime = time;
 	}
-
+	/**
+	 * Modifies elapsed time
+	 * @param time Time to change elapsed time to
+	 */
 	public synchronized void setElapsedTime(long time){
 		elapsedTime = time;
 	}
-
+	/**
+	 * Returns true if pvp is enabled
+	 */
 	public boolean getPvp() {
 		return pvp;
 	}
-
+	/**
+	 * Modifies pvp
+	 * @param state if true, pvp will be enabled
+	 */
 	public void setPvp(boolean state) {
 		pvp = state;
 	}
-
+	/**
+	 * Modifies current GameState
+	 * @see GameState
+	 * @param gameState GameState to modify current state to
+	 */
     public void setGameState(GameState gameState){
         Validate.notNull(gameState);
 
@@ -178,19 +233,14 @@ public class GameManager{
 
         // Update MOTD
         switch(gameState){
-            case ENDED:
-                setMotd(Lang.DISPLAY_MOTD_ENDED);
-                break;
-            case LOADING:
+	        case LOADING:
                 setMotd(Lang.DISPLAY_MOTD_LOADING);
                 break;
             case DEATHMATCH:
-                setMotd(Lang.DISPLAY_MOTD_PLAYING);
+	        case PLAYING:
+		        setMotd(Lang.DISPLAY_MOTD_PLAYING);
                 break;
-            case PLAYING:
-                setMotd(Lang.DISPLAY_MOTD_PLAYING);
-                break;
-            case STARTING:
+	        case STARTING:
                 setMotd(Lang.DISPLAY_MOTD_STARTING);
                 break;
             case WAITING:
@@ -201,7 +251,10 @@ public class GameManager{
                 break;
         }
     }
-
+	/**
+	 * Modifies MOTD of the server
+	 * @param motd MOTD to change Server MOTD to
+	 */
     private void setMotd(String motd){
         if (config.get(MainConfig.DISABLE_MOTD)){
             return; // No motd support
@@ -223,7 +276,9 @@ public class GameManager{
             ex.printStackTrace();
         }
     }
-
+	/**
+	 * Loads new game
+	 */
 	public void loadNewGame() {
 		statsHandler.startRegisteringStats();
 
@@ -246,7 +301,10 @@ public class GameManager{
 			startWaitingPlayers();
 		}
 	}
-
+	/**
+	 * Returns current GameState
+	 * @see GameState
+	 */
 	public void startWaitingPlayers() {
 		mapLoader.prepareWorlds();
 
