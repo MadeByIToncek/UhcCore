@@ -302,8 +302,7 @@ public class GameManager{
 		}
 	}
 	/**
-	 * Returns current GameState
-	 * @see GameState
+	 * Start waiting for players
 	 */
 	public void startWaitingPlayers() {
 		mapLoader.prepareWorlds();
@@ -317,7 +316,9 @@ public class GameManager{
 		Bukkit.getLogger().info(Lang.DISPLAY_MESSAGE_PREFIX+" Players are now allowed to join");
 		Bukkit.getScheduler().scheduleSyncDelayedTask(UhcCore.getPlugin(), new PreStartThread(this),0);
 	}
-
+	/**
+	 * Start game
+	 */
 	public void startGame() {
 		setGameState(GameState.STARTING);
 
@@ -333,7 +334,9 @@ public class GameManager{
 		playerManager.randomTeleportTeams();
 		gameIsEnding = false;
 	}
-
+	/**
+	 * Start timers and listeners
+	 */
 	public void startWatchingEndOfGame(){
 		setGameState(GameState.PLAYING);
 
@@ -362,17 +365,25 @@ public class GameManager{
 		Bukkit.getPluginManager().callEvent(new UhcStartedEvent());
 		statsHandler.addGameToStatistics();
 	}
-
+	/**
+	 * Broadcasts message
+	 * @param message Message to send to all players
+	 */
 	public void broadcastMessage(String message){
 		for(UhcPlayer player : playerManager.getPlayersList()){
 			player.sendMessage(message);
 		}
 	}
-
+	/**
+	 * Broadcasts system message
+	 * @param message System message to send to all players
+	 */
 	public void broadcastInfoMessage(String message){
 		broadcastMessage(Lang.DISPLAY_MESSAGE_PREFIX+" "+message);
 	}
-
+	/**
+	 * Loads all configuration files
+	 */
 	public void loadConfig(){
 		new Lang();
 
@@ -411,7 +422,9 @@ public class GameManager{
 			CraftsManager.registerGoldenHeadCraft();
 		}
 	}
-
+	/**
+	 * Registers all listeners
+	 */
 	private void registerListeners() {
 		// Registers Listeners
 		List<Listener> listeners = new ArrayList<>();
@@ -433,7 +446,9 @@ public class GameManager{
 			Bukkit.getServer().getPluginManager().registerEvents(listener, UhcCore.getPlugin());
 		}
 	}
-
+	/**
+	 * Registers all commands
+	 */
 	private void registerCommands(){
 		// Registers CommandExecutor
 		registerCommand("uhccore", new UhcCommandExecutor(this));
@@ -453,7 +468,9 @@ public class GameManager{
 		registerCommand("deathmatch", new DeathmatchCommandExecutor(this, deathmatchHandler));
 		registerCommand("team", new TeamCommandExecutor(this));
 	}
-
+	/**
+	 * Registers one command
+	 */
 	private void registerCommand(String commandName, CommandExecutor executor){
 		PluginCommand command = UhcCore.getPlugin().getCommand(commandName);
 		if (command == null){
@@ -463,7 +480,9 @@ public class GameManager{
 
 		command.setExecutor(executor);
 	}
-
+	/**
+	 * Ends game
+	 */
 	public void endGame() {
 		if(gameState.equals(GameState.PLAYING) || gameState.equals(GameState.DEATHMATCH)){
 			setGameState(GameState.ENDED);
@@ -475,14 +494,18 @@ public class GameManager{
 			Bukkit.getScheduler().scheduleSyncDelayedTask(UhcCore.getPlugin(), new StopRestartThread(),20);
 		}
 	}
-
+	/**
+	 * Starts timer to end game
+	 */
 	public void startEndGameThread() {
 		if(!gameIsEnding && (gameState.equals(GameState.DEATHMATCH) || gameState.equals(GameState.PLAYING))){
 			gameIsEnding = true;
 			EndThread.start();
 		}
 	}
-
+	/**
+	 * Stops timer to end game
+	 */
 	public void stopEndGameThread(){
 		if(gameIsEnding && (gameState.equals(GameState.DEATHMATCH) || gameState.equals(GameState.PLAYING))){
 			gameIsEnding = false;
