@@ -24,14 +24,6 @@ allprojects {
             // VaultAPI
             url = 'https://jitpack.io'
         }
-        maven {
-            // WorldEdit
-            url = 'https://maven.enginehub.org/repo/'
-        }
-        maven {
-            // ProtocolLib
-            url "https://repo.dmulloy2.net/repository/public/"
-        }
         // PaperLib
         maven {
             url 'https://papermc.io/repo/repository/maven-public/'
@@ -43,6 +35,7 @@ allprojects {
         flatDir {
             dirs "$rootDir/libs"
         }
+        mavenLocal()
     }
 
     processResources {
@@ -65,7 +58,7 @@ dependencies {
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     implementation 'net.wesjd:anvilgui:1.5.3-SNAPSHOT'
     implementation "io.papermc:paperlib:1.0.5"
-    compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
+    compileOnly 'com.github.dmulloy2:ProtocolLib:4.7.0'
     implementation project('Support-WorldEdit-6')
     implementation project('Support-WorldEdit-7')
     implementation project(":adapters")
